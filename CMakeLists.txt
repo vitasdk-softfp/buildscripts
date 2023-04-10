@@ -280,7 +280,7 @@ function(toolchain_deps toolchain_deps_dir toolchain_install_dir toolchain_suffi
 
     ExternalProject_Add(vita-toolchain${suffix}
         DEPENDS libelf${suffix} zlib${suffix} libzip${suffix} libyaml${suffix}
-        GIT_REPOSITORY https://github.com/vitasdk/vita-toolchain
+        GIT_REPOSITORY https://github.com/vitasdk-softfp/vita-toolchain
         GIT_TAG ${TOOLCHAIN_TAG}
         ${GIT_SHALLOW_SUPPORT}
         # Set prefix to "/" here to be able to install twice
@@ -447,7 +447,7 @@ set(common_gcc_configure_args
     --with-arch=armv7-a
     --with-tune=cortex-a9
     --with-fpu=neon
-    --with-float=hard
+    --with-float=softfp
     --with-mode=thumb
     "--with-pkgversion=${pkgversion}"
     )
@@ -489,7 +489,7 @@ ExternalProject_add(gcc-base
 
 ExternalProject_add(vita-headers
     DEPENDS binutils_${build_suffix} vita-toolchain_${build_suffix}
-    GIT_REPOSITORY https://github.com/vitasdk/vita-headers
+    GIT_REPOSITORY https://github.com/vitasdk-softfp/vita-headers
     GIT_TAG ${HEADERS_TAG}
     ${GIT_SHALLOW_SUPPORT}
     CONFIGURE_COMMAND ""
@@ -658,7 +658,7 @@ ExternalProject_Add(samples
     )
 
 ExternalProject_Add(vdpm
-    GIT_REPOSITORY https://github.com/vitasdk/vdpm.git
+    GIT_REPOSITORY https://github.com/vitasdk-softfp/vdpm.git
     GIT_TAG ${VDPM_TAG}
     ${GIT_SHALLOW_SUPPORT}
     BUILD_IN_SOURCE 1
