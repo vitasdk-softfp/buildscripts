@@ -8,11 +8,11 @@ cmake_minimum_required(VERSION 3.2.0)
 project(vitasdk)
 
 # Use the following gcc version
-set(GCC_VERSION 13.1.0)
-set(GCC_HASH SHA256=61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86)
+set(GCC_VERSION 10.3.0)
+set(GCC_HASH SHA256=64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344)
 
 set(ZLIB_VERSION 1.2.13)
-set(ZLIB_HASH SHA256=d14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98)
+set(ZLIB_HASH SHA256=b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30)
 
 set(LIBELF_VERSION 0.8.13)
 set(LIBELF_HASH SHA256=591a9b4ec81c1f2042a97aa60564e0cb79d041c52faa7416acb38bc95bd2c76d)
@@ -34,8 +34,8 @@ set(ISL_VERSION 0.21)
 set(EXPAT_VERSION 2.3.0)
 set(EXPAT_HASH SHA256=f122a20eada303f904d5e0513326c5b821248f2d4d2afbf5c6f1339e511c0586)
 
-set(BINUTILS_VERSION 2.40)
-set(BINUTILS_HASH SHA256=0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1)
+set(BINUTILS_VERSION 2.34)
+set(BINUTILS_HASH SHA256=f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952)
 
 set(GDB_VERSION 9.2)
 set(GDB_HASH SHA256=360cd7ae79b776988e89d8f9a01c985d0b1fa21c767a4295e5f88cb49175c555)
@@ -123,7 +123,7 @@ function(toolchain_deps toolchain_deps_dir toolchain_install_dir toolchain_suffi
     set(suffix "_${toolchain_suffix}")
 
     ExternalProject_Add(zlib${suffix}
-        URL https://zlib.net/zlib-${ZLIB_VERSION}.tar.xz
+        URL https://www.zlib.net/fossils/zlib-${ZLIB_VERSION}.tar.gz
         URL_HASH ${ZLIB_HASH}
         DOWNLOAD_DIR ${DOWNLOAD_DIR}
         PATCH_COMMAND patch -d <SOURCE_DIR> -p1 -t -N < ${PROJECT_SOURCE_DIR}/patches/zlib.patch
@@ -492,13 +492,17 @@ ExternalProject_add(vita-headers
     GIT_REPOSITORY https://github.com/vitasdk-softfp/vita-headers
     GIT_TAG ${HEADERS_TAG}
     ${GIT_SHALLOW_SUPPORT}
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND VITA_LIBS_GEN=${vita_libs_gen_command}
-        ARCH=${binutils_prefix}
-        BYPASS_INSTALL=1
-        python <SOURCE_DIR>/build.py <BINARY_DIR>
+    # CONFIGURE_COMMAND ""
+    # BUILD_COMMAND VITA_LIBS_GEN=${vita_libs_gen_command}
+    #     ARCH=${binutils_prefix}
+    #     BYPASS_INSTALL=1
+    #     python <SOURCE_DIR>/build.py <BINARY_DIR>
+    CONFIGURE_COMMAND ${vita_libs_gen_command}-2 -yml=<SOURCE_DIR>/db -output=<BINARY_DIR>
+    BUILD_COMMAND ARCH=${binutils_prefix}
+        make
     # Copy the generated .a files to the install directory
-    INSTALL_COMMAND ${CMAKE_COMMAND} -DGLOB_PATTERN=<BINARY_DIR>/*/*/*a
+    # INSTALL_COMMAND ${CMAKE_COMMAND} -DGLOB_PATTERN=<BINARY_DIR>/*/*/*a
+    INSTALL_COMMAND ${CMAKE_COMMAND} -DGLOB_PATTERN=<BINARY_DIR>/*.a
     -DINSTALL_DIR=${CMAKE_INSTALL_PREFIX}/${target_arch}/lib
     -P ${CMAKE_SOURCE_DIR}/cmake/install_files.cmake
     # Copy the include headers to the installation directory
