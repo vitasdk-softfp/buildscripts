@@ -1,11 +1,11 @@
 diff -ru a/src/libelf-0.8.13/config.sub b/src/libelf-0.8.13/config.sub
 --- a/src/libelf-0.8.13/config.sub	2005-05-21 19:28:37
-+++ b/src/libelf-0.8.13/config.sub	2025-12-27 23:28:32
++++ b/src/libelf-0.8.13/config.sub	2025-12-28 01:29:02
 @@ -231,6 +231,7 @@
  	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
  	| am33_2.0 \
  	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr \
-+	| aarch64 \
++	| aarch64 | arm64-apple \
  	| c4x | clipper \
  	| d10v | d30v | dlx | dsp16xx \
  	| fr30 | frv \
